@@ -8,6 +8,33 @@ object List {
         case Cons(x, xs) => x +sum(xs)
         }
 
+	def foldRight[A,B](as: List[A], z: B)(f: (A, B) => B ): B = as match {
+		case Nil => z
+		case Cons(x, xs) => f(x, foldRight(xs, z)(f))
+	}
+
+	def length[A](as: List[A]): Int = as match {
+		case Nil => 0
+		case Cons(x,xs) => 1 + length(xs) 
+	}
+
+	def length2[A](as: List[A]): Int = 
+		foldRight(as, 0)((x,y) => y+1)
+
+	def sum2(ns: List[Int]) =
+		foldRight(ns, 0)((x,y) => x + y)
+
+	def product2(ns: List[Double]) =
+		foldRight(ns, 1.0)(_*_)
+
+	def foldLeft[A,B](as: List[A], z: B)(f: (B, A) => B): B = as match {
+		case Nil => z
+		case Cons(x, xs) => foldLeft(xs, f(z, x))(f)
+	}
+
+	def sum3(ints: List[Int]): Int = 
+		foldLeft(ints, 0)(_+_)
+
         def product(ds: List[Double]): Double = ds match {
                 case Nil => 1.0
                 case Cons(0.0, _) => 0.0
@@ -79,6 +106,16 @@ object TestMain {
 
                 // 3.6
                 println(List.init(y))
+
+		//3.8
+		println(List.foldRight(List(1,2,3), Nil:List[Int])(Cons(_,_)))
+
+		//3.9
+		println(List.length(xs))
+		println(List.length2(xs))
+
+		//3.11
+		println(List.sum3(xs))
         }
 }
 
